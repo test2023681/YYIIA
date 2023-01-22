@@ -12,6 +12,15 @@
 from pyrogram import Client
 import config
 
+
+from os import environ
+from aiohttp import web as webserver
+
+PORT_CODE = environ.get("PORT", "8080")
+
+
+
+
 DOWNLOAD_LOCATION = "./Downloads"
 
 """
@@ -33,4 +42,11 @@ Client(
     api_hash=API_HASH,
     plugins=plugins,
     workers=100
-).run()
+) 
+
+    client = webserver.AppRunner(await bot_run())
+    await client.setup()
+    bind_address = "0.0.0.0"
+    await webserver.TCPSite(client, bind_address, PORT_CODE).start() 
+
+.run()
